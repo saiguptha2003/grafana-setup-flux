@@ -1,0 +1,53 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: prd-monitoring
+spec:
+  values:
+    grafana:
+      persistence:
+        enabled: true
+        type: pvc
+        storageClassName: standard
+        size: 2Gi
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
+      grafana.ini:
+        server:
+          domain: localhost
+          root_url: http://localhost:3000
+        security:
+          admin_user: admin
+          admin_password: admin
+        auth:
+          disable_login_form: false
+          disable_signout_menu: false
+        auth.anonymous:
+          enabled: false
+        users:
+          allow_sign_up: false
+          allow_org_create: false
+    prometheus:
+      prometheusSpec:
+        retention: 7d
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: standard
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 5Gi
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 200m
+            memory: 1Gi

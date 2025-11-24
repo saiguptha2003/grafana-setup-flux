@@ -1,4 +1,31 @@
 ---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: grafana-setup-flux
+  namespace: flux-system
+spec:
+  interval: 30m
+  ref:
+    branch: main
+  url: https://github.com/saiguptha2003/grafana-setup-flux
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: central-grafana-prd
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: grafana-setup-flux
+  path: ./central-grafana/environments/prd/monitoring
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -10,7 +37,9 @@ spec:
   timeout: 5m
   prune: true
   wait: true
+  dependsOn:
+    - name: central-grafana-prd
   sourceRef:
     kind: GitRepository
-    name: central-shared-services-deployment
-  path: ./app/projects/central-grafana/environments/prd/grafana
+    name: grafana-setup-flux
+  path: ./central-grafana/base/configs

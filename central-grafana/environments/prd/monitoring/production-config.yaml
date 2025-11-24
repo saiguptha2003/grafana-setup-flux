@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: production-config
+  namespace: prd-monitoring
+  labels:
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/component: monitoring
+    environment: production
+data:
+  # Production specific datasource configurations
+  production-datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://kube-prometheus-stack-prometheus.prd-monitoring:9090
+        access: proxy
+        isDefault: true
+        editable: false
+      - name: Loki
+        type: loki
+        url: http://loki-gateway.prd-monitoring:80
+        access: proxy
+        editable: false
+      - name: AlertManager
+        type: alertmanager
+        url: http://kube-prometheus-stack-alertmanager.prd-monitoring:9093
+        access: proxy
+        editable: false
+  # Local testing monitoring configuration
+  monitoring-config.yaml: |
+    environment: local-testing
+    retention:
+      prometheus: 7d
+      loki: 1d
+    alerting:
+      enabled: false
+      smtp_enabled: false
+    backup:
+      enabled: false
+    resources:
+      limits_enabled: true
+      monitoring_enabled: true

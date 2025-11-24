@@ -1,0 +1,29 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: prd-monitoring
+spec:
+  values:
+    loki:
+      limits_config:
+        retention_period: 24h  # 1 day for local testing
+        max_query_length: 720h
+        max_query_series: 100000
+        max_entries_limit_per_query: 1000
+        max_concurrent_tail: 5
+    singleBinary:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 512Mi
+      persistence:
+        enabled: true
+        storageClass: standard
+        size: 5Gi
+    minio:
+      enabled: true  # Use MinIO for local testing
