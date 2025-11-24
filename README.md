@@ -21,7 +21,7 @@ This repository contains a complete GitOps-based monitoring solution using Flux,
     └───a1/
         └───app-configuration/  # Cluster-specific Flux manifests
 ```
-[REDACTED]
+
 ## Components
 
 ### Monitoring Stack
