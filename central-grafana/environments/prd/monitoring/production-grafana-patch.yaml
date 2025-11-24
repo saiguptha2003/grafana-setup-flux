@@ -43,6 +43,8 @@ spec:
           mountPath: /etc/grafana/provisioning/folders
         - name: mscqa-grafana-folder-permissions
           mountPath: /etc/grafana/provisioning/permissions
+        - name: mscqa-teams
+          mountPath: /etc/grafana/provisioning/teams
     prometheus:
       prometheusSpec:
         retention: 7d
