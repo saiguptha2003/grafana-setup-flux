@@ -4,3 +4,5 @@ namespace: monitoring
 resources:
   - mscqa-datasources.yaml
   - mscqa-teams.yaml
+  - mscqa-folders.yaml
+  - mscqa-folder-permissions.yaml

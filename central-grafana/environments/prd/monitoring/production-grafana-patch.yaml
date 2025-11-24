@@ -37,6 +37,12 @@ spec:
       # must contain keys `admin-user` and `admin-password`.
       admin:
         existingSecret: grafana-admin-credentials
+      # Mount provisioning configmaps so Grafana reads folder definitions
+      extraConfigmapMounts:
+        - name: mscqa-grafana-folders
+          mountPath: /etc/grafana/provisioning/folders
+        - name: mscqa-grafana-folder-permissions
+          mountPath: /etc/grafana/provisioning/permissions
     prometheus:
       prometheusSpec:
         retention: 7d
