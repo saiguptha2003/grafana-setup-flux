@@ -32,6 +32,11 @@ spec:
         users:
           allow_sign_up: false
           allow_org_create: false
+      # Use an existing Kubernetes Secret for admin credentials to avoid
+      # committing passwords into Git. The secret `grafana-admin-credentials`
+      # must contain keys `admin-user` and `admin-password`.
+      admin:
+        existingSecret: grafana-admin-credentials
     prometheus:
       prometheusSpec:
         retention: 7d

@@ -38,4 +38,5 @@ spec:
             app.kubernetes.io/component: monitoring
     grafana:
       defaultDashboardsEnabled: false
-      adminPassword: flux
+      # Admin password must not be stored in Git values. Use an external Secret
+      # and set it per-environment. This default avoids leaking credentials.
