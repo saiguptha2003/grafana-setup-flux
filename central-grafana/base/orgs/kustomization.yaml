@@ -6,3 +6,4 @@ resources:
   - mscqa-teams.yaml
   - mscqa-folders.yaml
   - mscqa-folder-permissions.yaml
+  - mscqa-grafana-provisioning.yaml

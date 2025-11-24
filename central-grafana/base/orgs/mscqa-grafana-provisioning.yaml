@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mscqa-grafana-provisioning
+  labels:
+    grafana_provisioning: "1"
+data:
+  folders/folders.yaml: |-
+    apiVersion: 1
+    providers:
+      - name: 'mscqa-folders'
+        orgId: 1
+        type: file
+        disableDeletion: false
+        options:
+          folders:
+            - title: backend-services
+              uid: backend-services
+            - title: jobs-scheduling
+              uid: jobs-scheduling
+
+  permissions/permissions.yaml: |-
+    apiVersion: 1
+    providers:
+      - name: 'mscqa-folder-permissions'
+        orgId: 1
+        type: file
+        folder_permissions:
+          - folderUid: backend-services
+            permissions:
+              - team: backend-services
+                role: Editor
+          - folderUid: jobs-scheduling
+            permissions:
+              - team: jobs-scheduling
+                role: Editor
+
+  teams/teams.yaml: |-
+    apiVersion: 1
+    teams:
+      - name: backend-services
+        orgRole: Editor
+        email: backend-team@example.com
+      - name: jobs-scheduling
+        orgRole: Editor
+        email: jobs-team@example.com
