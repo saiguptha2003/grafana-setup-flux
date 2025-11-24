@@ -6,12 +6,11 @@ metadata:
     org: mscqa
 data:
   teams.yaml: |-
+    apiVersion: 1
     teams:
-      - name: mscqa
-        projects:
-          - backend-services
-          - jobs-scheduling
-        contacts:
-          - name: sandeep polavarpu
-            role: lead
-            email: sandeep.polavarpu@cm.com
+      - name: backend-services
+        orgRole: Editor
+        email: backend-team@example.com
+      - name: jobs-scheduling
+        orgRole: Editor
+        email: jobs-team@example.com
