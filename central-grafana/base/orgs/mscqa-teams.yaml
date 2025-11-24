@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mscqa-teams
+  labels:
+    org: mscqa
+data:
+  teams.yaml: |-
+    teams:
+      - name: mscqa
+        projects:
+          - backend-services
+          - jobs-scheduling
+        contacts:
+          - name: sandeep polavarpu
+            role: lead
+            email: sandeep.polavarpu@cm.com
