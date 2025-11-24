@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mscqa-grafana-folder-permissions
+  labels:
+    grafana_provisioning: "1"
+data:
+  permissions.yaml: |-
+    apiVersion: 1
+    providers:
+      - name: 'mscqa-folder-permissions'
+        orgId: 1
+        type: file
+        folder_permissions:
+          - folderUid: backend-services
+            permissions:
+              - team: mscqa
+                role: Editor
+          - folderUid: jobs-scheduling
+            permissions:
+              - team: mscqa
+                role: Editor
