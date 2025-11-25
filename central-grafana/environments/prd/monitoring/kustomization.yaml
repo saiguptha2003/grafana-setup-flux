@@ -5,6 +5,7 @@ resources:
   - ../../../base
   - production-config.yaml
   - secrets.yaml
+  - provision-grafana-teams.yaml
 patches:
   - path: production-grafana-patch.yaml
   - path: production-loki-patch.yaml

@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: provision-grafana-teams
+  namespace: prd-monitoring
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: provision
+          image: curlimages/curl:8.2.1
+          env:
+            - name: GRAFANA_URL
+              value: "http://kube-prometheus-stack-grafana:80"
+            - name: ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-admin-credentials
+                  key: admin-user
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-admin-credentials
+                  key: admin-password
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              set -eux
+              # create teams
+              for team in backend-services jobs-scheduling; do
+                curl -sS -u "$ADMIN_USER:$ADMIN_PASSWORD" -X POST "$GRAFANA_URL/api/teams" -H 'Content-Type: application/json' -d "{\"name\":\"$team\"}" || true
+              done
+              # create folders
+              for folder in backend-services jobs-scheduling; do
+                curl -sS -u "$ADMIN_USER:$ADMIN_PASSWORD" -X POST "$GRAFANA_URL/api/folders" -H 'Content-Type: application/json' -d "{\"title\":\"$folder\", \"uid\": \"$folder\"}" || true
+              done
+              # assign folder permissions: give team Editor role
+              for folder in backend-services jobs-scheduling; do
+                teamid=$(curl -sS -u "$ADMIN_USER:$ADMIN_PASSWORD" "$GRAFANA_URL/api/teams/search?name=$folder" | jq -r '.teams[0].id') || true
+                if [ -n "$teamid" ] && [ "$teamid" != "null" ]; then
+                  curl -sS -u "$ADMIN_USER:$ADMIN_PASSWORD" -X POST "$GRAFANA_URL/api/folders/$folder/permissions" -H 'Content-Type: application/json' -d "[{\"teamId\":$teamid,\"permission\":2}]" || true
+                fi
+              done
+      serviceAccountName: default
